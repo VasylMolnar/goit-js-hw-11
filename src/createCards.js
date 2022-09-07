@@ -1,5 +1,4 @@
 export default function createCards(cards) {
-  console.log(cards);
   return cards
     .map(
       ({
