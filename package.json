@@ -2,7 +2,7 @@
   "name": "goit-js-hw-11",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/VasylMolnar/goit-js-hw-11#readme",
+  "homepage": "https://vasylmolnar.github.io/goit-js-hw-11/",
   "scripts": {
     "start": "parcel src/*.html",
     "build": "parcel build src/*.html --public-url /goit-js-hw-11/"
