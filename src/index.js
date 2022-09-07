@@ -1,5 +1,5 @@
 import './css/styles.css';
-import fetchCountries from './fetchCountries'; // щоб не писати {fetchCountries} треба у файлі написати export defolt
+import fetchCountries from './fetchCountries'; 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import createCards from './createCards';
 import SimpleLightbox from 'simplelightbox';
