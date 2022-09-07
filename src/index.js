@@ -41,20 +41,23 @@ async function searchImage(event) {
         refs.loadMoreBtn.classList.add('is-hidden');
       }
 
-      if (value.totalHits == 0) {
+      if (value.totalHits > 0) {
+        refs.gallery.textContent = '';
+        const markup = createCards(value.hits);
+        refs.gallery.insertAdjacentHTML('afterbegin', markup);
+        Notify.success(`Hooray! We found ${totalHits} images.`);
+        lightbox.refresh();
+      }
+
+      if (value.totalHits === 0) {
         Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
         refs.gallery.textContent = '';
         refs.searchForm.reset();
+        refs.loadMoreBtn.classList('is-hidden');
         return;
       }
-
-      refs.gallery.textContent = '';
-      const markup = createCards(value.hits);
-      refs.gallery.insertAdjacentHTML('afterbegin', markup);
-      Notify.success(`Hooray! We found ${totalHits} images.`);
-      lightbox.refresh();
     })
     .catch(error => {
       console.log(error);
@@ -66,8 +69,15 @@ async function onClickLoadMoreBtn() {
   currentPage += 1;
   await fetchCountries(searchValue, currentPage)
     .then(value => {
-      refs.gallery.insertAdjacentHTML('beforeend', createCards(value.hits));
+      if (totalHits === value.totalHits) {
+        refs.loadMoreBtn.classList.add('is-hidden');
+        Notify.failure(
+          "We're sorry, but you've reached the end of search results."
+        );
+      }
+
       totalHits += value.hits.length;
+      refs.gallery.insertAdjacentHTML('beforeend', createCards(value.hits));
       lightbox.refresh();
     })
     .catch(error => {
@@ -76,13 +86,12 @@ async function onClickLoadMoreBtn() {
       Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
-      Notify.success(`Hooray! We found ${totalHits} images.`);
       return error;
     });
 }
 
 const lightbox = new SimpleLightbox('.photo-card a', {
-  captions: true,
+  captionPosition: 'bottom',
+  animationSpeed: 250,
   captionsData: 'alt',
-  captionDelay: 250,
 });
